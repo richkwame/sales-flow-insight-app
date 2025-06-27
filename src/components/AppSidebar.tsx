@@ -27,13 +27,14 @@ const menuItems = [
 ];
 
 export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   return (
-    <Sidebar className={collapsed ? "w-14" : "w-64"} collapsible>
+    <Sidebar className={isCollapsed ? "w-14" : "w-64"} collapsible="icon">
       <div className="p-4 border-b">
         <SidebarTrigger className="mb-2" />
-        {!collapsed && (
+        {!isCollapsed && (
           <h2 className="text-lg font-bold text-gray-800">Sales Tracker</h2>
         )}
       </div>
@@ -54,7 +55,7 @@ export function AppSidebar({ activeTab, setActiveTab }: AppSidebarProps) {
                     }`}
                   >
                     <item.icon className="mr-2 h-4 w-4" />
-                    {!collapsed && <span>{item.title}</span>}
+                    {!isCollapsed && <span>{item.title}</span>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

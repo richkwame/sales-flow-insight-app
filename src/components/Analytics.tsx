@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend } from "recharts";
 
 export function Analytics() {
   const [sales] = useLocalStorage("sales", []);
@@ -85,6 +84,10 @@ export function Analytics() {
 
   const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
+  // Custom tooltip formatters
+  const formatCurrency = (value: number) => `$${value.toFixed(2)}`;
+  const formatNumber = (value: number) => value.toString();
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -105,36 +108,109 @@ export function Analytics() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Revenue & Profit Trend</CardTitle>
+        <Card className="shadow-lg border-2 border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50">
+            <CardTitle className="text-xl font-bold text-gray-800">Revenue & Profit Trend</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="period" />
-                <YAxis />
-                <Tooltip formatter={(value: any) => [`$${value.toFixed(2)}`, ""]} />
-                <Line type="monotone" dataKey="revenue" stroke="#3B82F6" strokeWidth={2} name="Revenue" />
-                <Line type="monotone" dataKey="profit" stroke="#10B981" strokeWidth={2} name="Profit" />
+          <CardContent className="p-6">
+            <ResponsiveContainer width="100%" height={350}>
+              <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e7ff" strokeWidth={1} />
+                <XAxis 
+                  dataKey="period" 
+                  tick={{ fontSize: 12, fill: '#374151' }}
+                  axisLine={{ stroke: '#6b7280', strokeWidth: 2 }}
+                  tickLine={{ stroke: '#6b7280', strokeWidth: 1 }}
+                  label={{ value: `Time Period (${period})`, position: 'insideBottom', offset: -10, style: { textAnchor: 'middle', fontSize: '14px', fontWeight: 'bold', fill: '#374151' } }}
+                />
+                <YAxis 
+                  tick={{ fontSize: 12, fill: '#374151' }}
+                  axisLine={{ stroke: '#6b7280', strokeWidth: 2 }}
+                  tickLine={{ stroke: '#6b7280', strokeWidth: 1 }}
+                  label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: '14px', fontWeight: 'bold', fill: '#374151' } }}
+                />
+                <Tooltip 
+                  formatter={(value: any, name: string) => [formatCurrency(value), name]}
+                  labelStyle={{ fontWeight: 'bold', color: '#374151' }}
+                  contentStyle={{ 
+                    backgroundColor: '#f8fafc', 
+                    border: '2px solid #e2e8f0', 
+                    borderRadius: '8px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Legend 
+                  wrapperStyle={{ paddingTop: '20px', fontSize: '14px', fontWeight: 'bold' }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="revenue" 
+                  stroke="#3B82F6" 
+                  strokeWidth={4} 
+                  name="Revenue"
+                  dot={{ fill: '#3B82F6', strokeWidth: 3, r: 6 }}
+                  activeDot={{ r: 8, stroke: '#3B82F6', strokeWidth: 2, fill: '#ffffff' }}
+                  filter="drop-shadow(2px 2px 4px rgba(59, 130, 246, 0.3))"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="profit" 
+                  stroke="#10B981" 
+                  strokeWidth={4} 
+                  name="Profit"
+                  dot={{ fill: '#10B981', strokeWidth: 3, r: 6 }}
+                  activeDot={{ r: 8, stroke: '#10B981', strokeWidth: 2, fill: '#ffffff' }}
+                  filter="drop-shadow(2px 2px 4px rgba(16, 185, 129, 0.3))"
+                />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Sales Volume</CardTitle>
+        <Card className="shadow-lg border-2 border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-yellow-50 to-orange-50">
+            <CardTitle className="text-xl font-bold text-gray-800">Sales Volume</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="period" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="sales" fill="#F59E0B" />
+          <CardContent className="p-6">
+            <ResponsiveContainer width="100%" height={350}>
+              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#fef3c7" strokeWidth={1} />
+                <XAxis 
+                  dataKey="period" 
+                  tick={{ fontSize: 12, fill: '#374151' }}
+                  axisLine={{ stroke: '#6b7280', strokeWidth: 2 }}
+                  tickLine={{ stroke: '#6b7280', strokeWidth: 1 }}
+                  label={{ value: `Time Period (${period})`, position: 'insideBottom', offset: -10, style: { textAnchor: 'middle', fontSize: '14px', fontWeight: 'bold', fill: '#374151' } }}
+                />
+                <YAxis 
+                  tick={{ fontSize: 12, fill: '#374151' }}
+                  axisLine={{ stroke: '#6b7280', strokeWidth: 2 }}
+                  tickLine={{ stroke: '#6b7280', strokeWidth: 1 }}
+                  label={{ value: 'Number of Sales', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: '14px', fontWeight: 'bold', fill: '#374151' } }}
+                />
+                <Tooltip 
+                  formatter={(value: any) => [formatNumber(value), "Sales"]}
+                  labelStyle={{ fontWeight: 'bold', color: '#374151' }}
+                  contentStyle={{ 
+                    backgroundColor: '#fffbeb', 
+                    border: '2px solid #fbbf24', 
+                    borderRadius: '8px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
+                  }}
+                />
+                <Bar 
+                  dataKey="sales" 
+                  fill="url(#barGradient)"
+                  stroke="#d97706"
+                  strokeWidth={2}
+                  radius={[4, 4, 0, 0]}
+                />
+                <defs>
+                  <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#fbbf24" />
+                    <stop offset="100%" stopColor="#f59e0b" />
+                  </linearGradient>
+                </defs>
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -142,66 +218,90 @@ export function Analytics() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Top Products by Revenue</CardTitle>
+        <Card className="shadow-lg border-2 border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50">
+            <CardTitle className="text-xl font-bold text-gray-800">Top Products by Revenue</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             {topProducts.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
+              <ResponsiveContainer width="100%" height={350}>
+                <PieChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                   <Pie
                     data={topProducts}
                     cx="50%"
                     cy="50%"
-                    outerRadius={80}
+                    outerRadius={100}
+                    innerRadius={40}
                     fill="#8884d8"
                     dataKey="revenue"
                     label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    labelLine={false}
+                    stroke="#ffffff"
+                    strokeWidth={3}
                   >
                     {topProducts.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={COLORS[index % COLORS.length]}
+                        style={{
+                          filter: `drop-shadow(2px 2px 4px ${COLORS[index % COLORS.length]}40)`
+                        }}
+                      />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: any) => [`$${value.toFixed(2)}`, "Revenue"]} />
+                  <Tooltip 
+                    formatter={(value: any) => [formatCurrency(value), "Revenue"]}
+                    contentStyle={{ 
+                      backgroundColor: '#fdf4ff', 
+                      border: '2px solid #a855f7', 
+                      borderRadius: '8px',
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
+                    }}
+                  />
+                  <Legend 
+                    wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-64 text-gray-500">
+              <div className="flex items-center justify-center h-80 text-gray-500">
                 No sales data available
               </div>
             )}
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Product Performance</CardTitle>
+        <Card className="shadow-lg border-2 border-gray-100">
+          <CardHeader className="bg-gradient-to-r from-green-50 to-blue-50">
+            <CardTitle className="text-xl font-bold text-gray-800">Product Performance</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-6">
             {topProducts.length > 0 ? (
               <div className="space-y-4">
                 {topProducts.map((product: any, index: number) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200">
                     <div className="flex items-center gap-3">
                       <div 
-                        className="w-4 h-4 rounded-full" 
-                        style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                        className="w-5 h-5 rounded-full shadow-inner border-2 border-white" 
+                        style={{ 
+                          backgroundColor: COLORS[index % COLORS.length],
+                          boxShadow: `inset 0 2px 4px rgba(0,0,0,0.1), 0 2px 4px ${COLORS[index % COLORS.length]}40`
+                        }}
                       />
                       <div>
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-gray-600">{product.quantity} sold</p>
+                        <p className="font-semibold text-gray-800">{product.name}</p>
+                        <p className="text-sm text-gray-600 font-medium">{product.quantity} sold</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">${product.revenue.toFixed(2)}</p>
-                      <p className="text-sm text-green-600">+${product.profit.toFixed(2)}</p>
+                      <p className="font-bold text-lg text-gray-800">${product.revenue.toFixed(2)}</p>
+                      <p className="text-sm text-green-600 font-semibold">+${product.profit.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="flex items-center justify-center h-64 text-gray-500">
+              <div className="flex items-center justify-center h-80 text-gray-500">
                 No product data available
               </div>
             )}

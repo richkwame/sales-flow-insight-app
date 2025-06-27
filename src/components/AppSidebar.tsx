@@ -1,5 +1,5 @@
 
-import { BarChart3, Package, PlusCircle, TrendingUp, FileText, Menu } from "lucide-react";
+import { BarChart3, Package, PlusCircle, TrendingUp, FileText, Receipt, Menu } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +22,7 @@ const menuItems = [
   { id: "dashboard", title: "Dashboard", icon: BarChart3 },
   { id: "products", title: "Products", icon: Package },
   { id: "sales", title: "Sales Entry", icon: PlusCircle },
+  { id: "expenses", title: "Expenses", icon: Receipt },
   { id: "analytics", title: "Analytics", icon: TrendingUp },
   { id: "summary", title: "Daily Summary", icon: FileText },
 ];

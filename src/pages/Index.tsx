@@ -7,6 +7,7 @@ import { ProductManagement } from "@/components/ProductManagement";
 import { SalesEntry } from "@/components/SalesEntry";
 import { Analytics } from "@/components/Analytics";
 import { DailySummary } from "@/components/DailySummary";
+import { OperationalExpenses } from "@/components/OperationalExpenses";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -23,6 +24,8 @@ const Index = () => {
         return <Analytics />;
       case "summary":
         return <DailySummary />;
+      case "expenses":
+        return <OperationalExpenses />;
       default:
         return <Dashboard />;
     }

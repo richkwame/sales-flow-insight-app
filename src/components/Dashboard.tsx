@@ -7,19 +7,25 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 export function Dashboard() {
   const [products] = useLocalStorage("products", []);
   const [sales] = useLocalStorage("sales", []);
+  const [expenses] = useLocalStorage("expenses", []);
 
   const today = new Date().toISOString().split('T')[0];
   const todaySales = sales.filter((sale: any) => sale.date === today);
+  const todayExpenses = expenses.filter((expense: any) => expense.date === today);
   
   const todayRevenue = todaySales.reduce((sum: number, sale: any) => 
     sum + (sale.quantity * sale.price), 0
+  );
+  
+  const todayExpenseTotal = todayExpenses.reduce((sum: number, expense: any) => 
+    sum + expense.amount, 0
   );
   
   const todayProfit = todaySales.reduce((sum: number, sale: any) => {
     const product = products.find((p: any) => p.id === sale.productId);
     const profit = product ? (sale.price - product.costPrice) * sale.quantity : 0;
     return sum + profit;
-  }, 0);
+  }, 0) - todayExpenseTotal;
 
   const lowStockProducts = products.filter((product: any) => 
     product.quantity <= product.minStock
@@ -70,22 +76,22 @@ export function Dashboard() {
             <TrendingUp className="h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${todayRevenue.toFixed(2)}</div>
+            <div className="text-2xl font-bold">GH₵{todayRevenue.toFixed(2)}</div>
             <p className="text-xs text-blue-100">
               From {todaySales.length} sales today
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+        <Card className={`bg-gradient-to-r ${todayProfit >= 0 ? 'from-green-500 to-green-600' : 'from-red-500 to-red-600'} text-white`}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today's Profit</CardTitle>
-            <TrendingUp className="h-4 w-4" />
+            <CardTitle className="text-sm font-medium">Today's Net Profit</CardTitle>
+            {todayProfit >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${todayProfit.toFixed(2)}</div>
+            <div className="text-2xl font-bold">GH₵{todayProfit.toFixed(2)}</div>
             <p className="text-xs text-green-100">
-              Net profit margin: {todayRevenue > 0 ? ((todayProfit/todayRevenue) * 100).toFixed(1) : 0}%
+              After expenses: GH₵{todayExpenseTotal.toFixed(2)}
             </p>
           </CardContent>
         </Card>

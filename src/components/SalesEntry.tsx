@@ -140,7 +140,7 @@ export function SalesEntry() {
                   <div className="grid grid-cols-2 gap-2 text-sm">
                     <div>
                       <span className="text-gray-600">Selling Price:</span>
-                      <p className="font-medium">${selectedProduct.sellingPrice.toFixed(2)}</p>
+                      <p className="font-medium">GH₵{selectedProduct.sellingPrice.toFixed(2)}</p>
                     </div>
                     <div>
                       <span className="text-gray-600">Available Stock:</span>
@@ -171,7 +171,7 @@ export function SalesEntry() {
                   step="0.01"
                   value={formData.customPrice}
                   onChange={(e) => setFormData({...formData, customPrice: e.target.value})}
-                  placeholder={selectedProduct ? `Default: $${selectedProduct.sellingPrice.toFixed(2)}` : "Enter custom price"}
+                  placeholder={selectedProduct ? `Default: GH₵${selectedProduct.sellingPrice.toFixed(2)}` : "Enter custom price"}
                 />
               </div>
 
@@ -181,13 +181,13 @@ export function SalesEntry() {
                     <div className="flex justify-between">
                       <span>Subtotal:</span>
                       <span className="font-medium">
-                        ${((formData.customPrice ? parseFloat(formData.customPrice) : selectedProduct.sellingPrice) * parseInt(formData.quantity || "0")).toFixed(2)}
+                        GH₵{((formData.customPrice ? parseFloat(formData.customPrice) : selectedProduct.sellingPrice) * parseInt(formData.quantity || "0")).toFixed(2)}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Profit:</span>
                       <span className="font-medium text-green-600">
-                        ${(((formData.customPrice ? parseFloat(formData.customPrice) : selectedProduct.sellingPrice) - selectedProduct.costPrice) * parseInt(formData.quantity || "0")).toFixed(2)}
+                        GH₵{(((formData.customPrice ? parseFloat(formData.customPrice) : selectedProduct.sellingPrice) - selectedProduct.costPrice) * parseInt(formData.quantity || "0")).toFixed(2)}
                       </span>
                     </div>
                   </div>
@@ -219,13 +219,13 @@ export function SalesEntry() {
                       <div>
                         <p className="font-medium">{sale.productName}</p>
                         <p className="text-sm text-gray-600">
-                          Qty: {sale.quantity} × ${sale.price.toFixed(2)}
+                          Qty: {sale.quantity} × GH₵{sale.price.toFixed(2)}
                         </p>
                         <p className="text-xs text-gray-500">{sale.time}</p>
                       </div>
                       <div className="text-right">
-                        <p className="font-medium">${(sale.quantity * sale.price).toFixed(2)}</p>
-                        <p className="text-sm text-green-600">+${sale.profit.toFixed(2)}</p>
+                        <p className="font-medium">GH₵{(sale.quantity * sale.price).toFixed(2)}</p>
+                        <p className="text-sm text-green-600">+GH₵{sale.profit.toFixed(2)}</p>
                       </div>
                     </div>
                   </div>

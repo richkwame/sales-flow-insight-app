@@ -16,6 +16,7 @@ interface Product {
   quantity: number;
   minStock: number;
   category: string;
+  imageUrl?: string;
 }
 
 export function ProductManagement() {
@@ -27,7 +28,8 @@ export function ProductManagement() {
     sellingPrice: "",
     quantity: "",
     minStock: "",
-    category: ""
+    category: "",
+    imageUrl: ""
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,7 +51,8 @@ export function ProductManagement() {
       sellingPrice: parseFloat(formData.sellingPrice),
       quantity: parseInt(formData.quantity),
       minStock: parseInt(formData.minStock || "5"),
-      category: formData.category || "General"
+      category: formData.category || "General",
+      imageUrl: formData.imageUrl || undefined
     };
 
     setProducts([...products, newProduct]);
@@ -59,7 +62,8 @@ export function ProductManagement() {
       sellingPrice: "",
       quantity: "",
       minStock: "",
-      category: ""
+      category: "",
+      imageUrl: ""
     });
     setShowAddForm(false);
     
@@ -123,7 +127,7 @@ export function ProductManagement() {
               </div>
               
               <div>
-                <Label htmlFor="costPrice">Cost Price *</Label>
+                <Label htmlFor="costPrice">Cost Price (GH₵) *</Label>
                 <Input
                   id="costPrice"
                   type="number"
@@ -135,7 +139,7 @@ export function ProductManagement() {
               </div>
               
               <div>
-                <Label htmlFor="sellingPrice">Selling Price *</Label>
+                <Label htmlFor="sellingPrice">Selling Price (GH₵) *</Label>
                 <Input
                   id="sellingPrice"
                   type="number"
@@ -167,6 +171,20 @@ export function ProductManagement() {
                   placeholder="5"
                 />
               </div>
+
+              <div className="md:col-span-2">
+                <Label htmlFor="imageUrl">Product Image URL (Optional)</Label>
+                <Input
+                  id="imageUrl"
+                  type="url"
+                  value={formData.imageUrl}
+                  onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
+                  placeholder="https://example.com/image.jpg"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Note: For file uploads, connect to Supabase for image storage
+                </p>
+              </div>
               
               <div className="md:col-span-2 flex gap-2">
                 <Button type="submit" className="bg-green-600 hover:bg-green-700">
@@ -189,6 +207,18 @@ export function ProductManagement() {
         {products.map((product) => (
           <Card key={product.id} className={`${product.quantity <= product.minStock ? 'border-red-300 bg-red-50' : ''}`}>
             <CardHeader className="pb-3">
+              {product.imageUrl && (
+                <div className="w-full h-32 mb-2 overflow-hidden rounded-lg">
+                  <img 
+                    src={product.imageUrl} 
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">{product.name}</CardTitle>
                 {product.quantity <= product.minStock && (
@@ -201,11 +231,11 @@ export function ProductManagement() {
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <span className="text-gray-600">Cost:</span>
-                  <p className="font-medium">${product.costPrice.toFixed(2)}</p>
+                  <p className="font-medium">GH₵{product.costPrice.toFixed(2)}</p>
                 </div>
                 <div>
                   <span className="text-gray-600">Price:</span>
-                  <p className="font-medium">${product.sellingPrice.toFixed(2)}</p>
+                  <p className="font-medium">GH₵{product.sellingPrice.toFixed(2)}</p>
                 </div>
               </div>
               
@@ -238,7 +268,7 @@ export function ProductManagement() {
               
               <div className="pt-2 border-t">
                 <p className="text-xs text-gray-500">
-                  Profit margin: ${(product.sellingPrice - product.costPrice).toFixed(2)} 
+                  Profit margin: GH₵{(product.sellingPrice - product.costPrice).toFixed(2)} 
                   ({(((product.sellingPrice - product.costPrice) / product.sellingPrice) * 100).toFixed(1)}%)
                 </p>
               </div>

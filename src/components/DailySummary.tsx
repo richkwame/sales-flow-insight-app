@@ -41,23 +41,23 @@ export function DailySummary() {
       
       OVERVIEW
       Total Sales: ${todaySales.length}
-      Total Revenue: $${totalRevenue.toFixed(2)}
-      Total Cost: $${totalCost.toFixed(2)}
-      Total Profit: $${totalProfit.toFixed(2)}
+      Total Revenue: GH₵${totalRevenue.toFixed(2)}
+      Total Cost: GH₵${totalCost.toFixed(2)}
+      Total Profit: GH₵${totalProfit.toFixed(2)}
       Profit Margin: ${totalRevenue > 0 ? ((totalProfit / totalRevenue) * 100).toFixed(1) : 0}%
       
       TOP PERFORMERS
       Best Selling: ${topSellingProduct?.name || 'N/A'} (${topSellingProduct?.quantity || 0} units)
-      Most Profitable: ${mostProfitableProduct?.name || 'N/A'} ($${mostProfitableProduct?.profit?.toFixed(2) || '0.00'})
+      Most Profitable: ${mostProfitableProduct?.name || 'N/A'} (GH₵${mostProfitableProduct?.profit?.toFixed(2) || '0.00'})
       
       PRODUCT BREAKDOWN
       ${Object.values(productSummary).map((product: any) => 
-        `${product.name}: ${product.quantity} units, $${product.revenue.toFixed(2)} revenue, $${product.profit.toFixed(2)} profit`
+        `${product.name}: ${product.quantity} units, GH₵${product.revenue.toFixed(2)} revenue, GH₵${product.profit.toFixed(2)} profit`
       ).join('\n')}
       
       SALES DETAILS
       ${todaySales.map((sale: any) => 
-        `${sale.time} - ${sale.productName} x${sale.quantity} @ $${sale.price.toFixed(2)} = $${(sale.quantity * sale.price).toFixed(2)}`
+        `${sale.time} - ${sale.productName} x${sale.quantity} @ GH₵${sale.price.toFixed(2)} = GH₵${(sale.quantity * sale.price).toFixed(2)}`
       ).join('\n')}
     `;
 
@@ -119,11 +119,11 @@ export function DailySummary() {
             </div>
             <div>
               <p className="text-blue-100">Revenue</p>
-              <p className="text-2xl font-bold">${totalRevenue.toFixed(2)}</p>
+              <p className="text-2xl font-bold">GH₵{totalRevenue.toFixed(2)}</p>
             </div>
             <div>
               <p className="text-blue-100">Profit</p>
-              <p className="text-2xl font-bold">${totalProfit.toFixed(2)}</p>
+              <p className="text-2xl font-bold">GH₵{totalProfit.toFixed(2)}</p>
             </div>
             <div>
               <p className="text-blue-100">Margin</p>
@@ -160,7 +160,7 @@ export function DailySummary() {
                 {mostProfitableProduct?.name || 'No sales today'}
               </p>
               {mostProfitableProduct && (
-                <p className="text-sm text-blue-600">${mostProfitableProduct.profit.toFixed(2)} profit</p>
+                <p className="text-sm text-blue-600">GH₵{mostProfitableProduct.profit.toFixed(2)} profit</p>
               )}
             </div>
           </CardContent>
@@ -183,8 +183,8 @@ export function DailySummary() {
                       <p className="text-sm text-gray-600">{product.quantity} units</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">${product.revenue.toFixed(2)}</p>
-                      <p className="text-sm text-green-600">+${product.profit.toFixed(2)}</p>
+                      <p className="font-medium">GH₵{product.revenue.toFixed(2)}</p>
+                      <p className="text-sm text-green-600">+GH₵{product.profit.toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
@@ -215,8 +215,8 @@ export function DailySummary() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">${(sale.quantity * sale.price).toFixed(2)}</p>
-                    <p className="text-sm text-green-600">Profit: ${sale.profit.toFixed(2)}</p>
+                    <p className="font-medium">GH₵{(sale.quantity * sale.price).toFixed(2)}</p>
+                    <p className="text-sm text-green-600">Profit: GH₵{sale.profit.toFixed(2)}</p>
                   </div>
                 </div>
               ))}
